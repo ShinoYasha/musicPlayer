@@ -7,6 +7,7 @@
   <title>Document</title>
   <link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Nanum+Brush+Script" rel="stylesheet"> 
   <style>
     @font-face {
       font-family: lvjiande;
@@ -34,7 +35,7 @@
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      font-family:  lvjiande;
+      font-family: 'Nanum Brush Script', cursive;
       font-size: 16px;
       color: #ffffff;
       width: 340px;
@@ -61,7 +62,7 @@
       opacity: 0.3;
     } 
     .musicbox .info {
-      margin-left: 120px;
+      margin-left: 140px;
     }
     .musicbox .info .title {
       font-size: 25px;
@@ -89,7 +90,6 @@
     }
     .musicbox .time {
       text-align: right;
-  
     }
     .musicbox:after,
     .musicbox .music:after {
@@ -119,7 +119,7 @@
       content:'';
       display: inline-block;
       width: 8px;
-      height: 30px;
+      height: 38px;
       background: rgba(255, 115, 1, 0.8);
     }
   </style>
@@ -145,7 +145,7 @@
           <div class="progress-now"></div>
 
         </div>
-        <div class="time">0分0秒</div>
+        <div class="time">0:00</div>
       </div>
     </div>
     <ul class="list">
@@ -185,7 +185,11 @@
     audio.onplay = function() {
       clock = setInterval(function(){
         var playtime = audio.currentTime
-        $('.musicbox .time').innerText = Math.floor(playtime / 60) + '分' + Math.floor(playtime%60)+'秒'
+        if(Math.floor(playtime%60)<10){
+        $('.musicbox .time').innerText = Math.floor(playtime / 60) + ':0' + Math.floor(playtime%60)}
+        else{
+          $('.musicbox .time').innerText = Math.floor(playtime / 60) + ':' + Math.floor(playtime%60)} 
+        
       }, 1000)
       var ullist = document.querySelectorAll('li')
       ullist.forEach(function(e) {
