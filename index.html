@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    @font-face {
+      font-family: lvjiande;
+      src: url("font/lv.ttf");
+    }
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      height: 100%;
+    }
+    .cover {
+      position: absolute;
+      content: ''; 
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: url(https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2430230326,78329905&fm=27&gp=0.jpg) center center no-repeat;
+      background-size: cover;
+      filter: blur(2px);
+    }
+    .musicbox {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-family:  lvjiande;
+      font-size: 16px;
+      color: #ffffff;
+      width: 340px;
+      
+    }
+    .music-panel {
+      border: 1px solid white;
+      padding: 20px 20px 5px 20px;
+      box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1), 0px 2px 10px 0px rgba(0, 0, 0, 0.05);
+      /* background-color: rgb(1, 106, 138); */
+      background: radial-gradient(black, rgba(3, 78, 128,0.5), rgba(7, 220, 248,0.5));;
+    }
+    .music .control {
+      margin-top: 20px;
+      font-size: 22px;
+      color: rgb(139, 199, 199);
+      float: left;
+    }
+    .musicbox .control .fa {
+      margin-right: 12px;
+      cursor: pointer;
+    }
+    .musicbox .control .fa.disable {
+      opacity: 0.3;
+    } 
+    .musicbox .info {
+      margin-left: 120px;
+    }
+    .musicbox .info .title {
+      font-size: 25px;
+      font-weight: bolder;
+    }
+    .musicbox .info .author {
+      font-size: 20px;
+    }
+    .musicbox .progress {
+      width: 300px;
+    }
+    .musicbox .bar {
+      cursor: pointer;
+      height: 3px;
+      margin-top: 5px;
+      background-color: rgba(255, 255, 255, 0.2);
+      
+    }
+    .musicbox .progress .progress-now {
+      background-color:rgb(194, 92, 8);
+      height: 3px;
+      width: 0;
+      position: relative;
+      z-index: 1000;
+    }
+    .musicbox .time {
+      text-align: right;
+  
+    }
+    .musicbox:after,
+    .musicbox .music:after {
+      content: '';
+      display: block;
+      clear:both;
+    }
+    .musicbox .list {
+      list-style: none;
+    }
+    .musicbox .list>li {
+      font-size: 20px;
+      position: relative;
+      padding: 4px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-top: none;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .musicbox .list>li:hover {
+      background-color: rgba(194, 92, 8, 0.2);
+    }
+    .musicbox .list>li.playing:before{
+      position: absolute;
+      top: 0;
+      left: 0;
+      content:'';
+      display: inline-block;
+      width: 8px;
+      height: 30px;
+      background: rgba(255, 115, 1, 0.8);
+    }
+  </style>
+</head>
+<body>
+  <div class="cover"></div>
+  <div class="musicbox">
+    <div class="music-panel">
+      <div class="music">
+        <div class="control">
+          <span class="back"><i class="fa fa-step-backward"></i></span>
+          <span class="play"><i class="fa fa-pause"></i></span>
+          <span class="forward"><i class="fa fa-step-forward"></i></span>
+        </div>
+        <div class="info">
+          <div class="title">my song</div>
+          <div class="author">li ang</div>
+        </div>
+      </div>
+      <div class="progress">
+        <div class="bar">
+          <div class="progress-total"></div>
+          <div class="progress-now"></div>
+
+        </div>
+        <div class="time">0分0秒</div>
+      </div>
+    </div>
+    <ul class="list">
+    </ul>
+  </div>
+  <script>
+    function getMusicList(callback) {
+      var xhr = new XMLHttpRequest()
+      xhr.open('GET','https://www.easy-mock.com/mock/5ab5e3041a094046dab2cb69/musicPlayer/musiclist', true)
+      xhr.onload = function() {
+        if((xhr.status >= 200 && xhr.status < 300)||xhr.status===304){
+          console.log(JSON.parse(this.responseText))
+          callback(JSON.parse(this.responseText))
+        }else {
+          console.log('获取数据失败')
+        }
+      }
+      xhr.onerror = function() {
+        console.log('网络异常！')
+      }
+      xhr.send()
+    }
+    var musiclist = []
+    var currentIndex = 0
+    var audio = new Audio()
+    audio.autoplay = true
+    getMusicList(function(list){
+      musiclist = list
+      loadMusic(list[currentIndex])
+      generateList(list)
+    })
+    
+    audio.ontimeupdate = function() {
+      $('.musicbox .progress-now').style.width = (this.currentTime / this.duration) * 100 + '%'
+      
+    }
+    audio.onplay = function() {
+      clock = setInterval(function(){
+        var playtime = audio.currentTime
+        $('.musicbox .time').innerText = Math.floor(playtime / 60) + '分' + Math.floor(playtime%60)+'秒'
+      }, 1000)
+      var ullist = document.querySelectorAll('li')
+      ullist.forEach(function(e) {
+        e.classList.remove('playing')
+      })
+      ullist[currentIndex].classList.add('playing')
+      $('.play .fa').classList.remove('fa-play')
+      $('.play .fa').classList.add('fa-pause')
+    }
+    audio.onpause = function() {
+      clearInterval(clock)
+    }
+
+
+
+    $('.musicbox .play').onclick = function(){
+      if(audio.paused){
+        audio.play()
+        this.querySelector('.fa').classList.remove('fa-play')
+        this.querySelector('.fa').classList.add('fa-pause')
+      }else{
+        audio.pause()
+        this.querySelector('.fa').classList.remove('fa-pause')
+        this.querySelector('.fa').classList.add('fa-play')
+      }
+    }
+    $('.musicbox .forward').onclick = function() {
+      currentIndex = (++currentIndex)%musiclist.length
+      loadMusic(musiclist[currentIndex])
+    }
+    $('.musicbox .back').onclick = function() {
+      currentIndex = (--currentIndex+musiclist.length)%musiclist.length
+      loadMusic(musiclist[currentIndex])
+    }
+    $('.musicbox .bar').onclick = function(e) {
+      var percent = e.offsetX / parseInt(getComputedStyle(this).width)
+      console.log(e.offsetX)
+      console.log(getComputedStyle(this).width)
+      audio.currentTime = audio.duration * percent
+
+    }
+    $('.list').onclick = function(e) {
+      var t = e.target
+      if(t.nodeName.toLowerCase() === 'li'){
+        var nth = t.className
+        currentIndex = parseInt(nth)
+        loadMusic(musiclist[currentIndex])
+      }
+    }
+ 
+    audio.onended = function() {
+      currentIndex = (++currentIndex)%musiclist.length
+      loadMusic(musiclist[currentIndex])
+
+    }
+
+    function loadMusic(musicObj) {
+      $('.cover').style.backgroundImage = 'url('+musicObj.img+')'
+      $('.musicbox .title').innerText = musicObj.title
+      $('.musicbox .author').innerText = musicObj.author
+      audio.src = musicObj.src
+    }
+    function $(selector) {
+      return document.querySelector(selector)
+    }
+    function generateList(list) {
+      var linum = list.length
+      var ul = $('.list')
+      for(var i = 0;i<linum;i++){
+        var li = document.createElement('li')
+        li.classList.add(i)
+        li.innerText = list[i].author + ' - ' + list[i].title
+        ul.append(li)
+      }
+    }
+  </script>
+</body>
+</html>
