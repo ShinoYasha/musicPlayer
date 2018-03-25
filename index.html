@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>music</title>
   <link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="https://fonts.googleapis.com/css?family=Nanum+Brush+Script" rel="stylesheet"> 
@@ -33,7 +33,7 @@
     .musicbox {
       position: absolute;
       left: 50%;
-      top: 50%;
+      top: 40%;
       transform: translate(-50%, -50%);
       font-family: 'Nanum Brush Script', cursive;
       font-size: 16px;
@@ -183,9 +183,10 @@
       $('.musicbox .progress-now').style.width = (this.currentTime / this.duration) * 100 + '%'
       
     }
-    audio.onplay = function() {
+    audio.onplaying = function() {
       clock = setInterval(function(){
         var playtime = audio.currentTime
+        console.log(audio.ended)
         if(Math.floor(playtime%60)<10){
         $('.musicbox .time').innerText = Math.floor(playtime / 60) + ':0' + Math.floor(playtime%60)}
         else{
@@ -201,9 +202,16 @@
       $('.play .fa').classList.add('fa-pause')
     }
     audio.onpause = function() {
+      console.log('pause')
       clearInterval(clock)
     }
+    
+    audio.onended = function() {
+      console.log('ended')
+      currentIndex = (++currentIndex)%musiclist.length
+      loadMusic(musiclist[currentIndex])
 
+    }
 
 
     $('.musicbox .play').onclick = function(){
@@ -241,11 +249,6 @@
       }
     }
  
-    audio.onended = function() {
-      currentIndex = (++currentIndex)%musiclist.length
-      loadMusic(musiclist[currentIndex])
-
-    }
 
     function loadMusic(musicObj) {
       $('.cover').style.backgroundImage = 'url('+musicObj.img+')'
