@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
   <title>music</title>
   <link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -193,6 +193,7 @@
           $('.musicbox .time').innerText = Math.floor(playtime / 60) + ':' + Math.floor(playtime%60)} 
         
       }, 1000)
+      console.log(musiclist.length)
       var ullist = document.querySelectorAll('li')
       ullist.forEach(function(e) {
         e.classList.remove('playing')
