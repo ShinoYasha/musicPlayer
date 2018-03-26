@@ -75,10 +75,33 @@
       width: 300px;
     }
     .musicbox .bar {
+        cursor: pointer;
+        height: 3px;
+        margin-top: 5px;
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+    .musicbox .volbar{
+
+        border: 1px solid lightskyblue;
       cursor: pointer;
-      height: 3px;
+      height: 5px;
       margin-top: 5px;
       background-color: rgba(255, 255, 255, 0.2);
+    }
+    .musicbox .vol {
+        font-size: 25px;
+        padding-left: 70px;
+    }
+    .musicbox .volume {
+        width: 50px;
+        float: left;
+    }
+    .musicbox .vol-now {
+        background-color: white;
+        height: 5px;
+        width: 100%;
+        position: relative;
+        z-index: 1000;
     }
     .musicbox .progress .progress-now {
         float:left;
@@ -162,6 +185,14 @@
         </div>
         <div class="time">0:00</div>
       </div>
+      <div class="volume">
+
+          <div class="volbar">
+              <div class="vol-now"></div>
+          </div>
+
+      </div>
+        <div class="vol">vol:100</div>
     </div>
     <ul class="list">
     </ul>
@@ -195,7 +226,6 @@
     
     audio.ontimeupdate = function() {
       $('.musicbox .progress-now').style.width = (this.currentTime / this.duration) * 100 + '%'
-      
     }
     audio.onplaying = function() {
       clock = setInterval(function(){
@@ -227,7 +257,13 @@
       loadMusic(musiclist[currentIndex])
 
     }
-
+    $('.musicbox .volume').onclick = function(e){
+      console.log('123')
+      var percent = e.offsetX / parseInt(getComputedStyle(this).width)
+      audio.volume = percent
+      $('.musicbox .vol-now').style.width = percent*100 + '%'
+      $('.musicbox .vol').innerText = 'vol:' + Math.floor(percent*100)
+    }
 
     $('.musicbox .play').onclick = function(){
       if(audio.paused){
