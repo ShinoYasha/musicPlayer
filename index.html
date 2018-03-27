@@ -62,7 +62,7 @@
       opacity: 0.3;
     } 
     .musicbox .info {
-      margin-left: 140px;
+      margin-left: 110px;
     }
     .musicbox .info .title {
       font-size: 25px;
@@ -74,28 +74,28 @@
     .musicbox .music{
       position: relative;
     }
-    /*.musicbox .volume2 {*/
+    .musicbox .volume2 {
 
-      /*position: absolute;*/
-      /*width: 30px;*/
-      /*height: 40px;*/
-      /*right: -5px;*/
-      /*bottom: 20px;*/
-    /*}*/
-    /*.music .volbar2 {*/
-      /*position: relative;*/
-      /*border: 1px solid lightskyblue;*/
-      /*cursor: pointer;*/
-      /*height: 40px;*/
-      /*width: 5px;*/
-      /*background-color: white;*/
-      /*margin-left: 5px;*/
-    /*}*/
-    /*.musicbox .vol-now2 {*/
-      /*background-color!important;: transparent;*/
-      /*height: 40px;*/
-      /*width: 5px;*/
-    /*}*/
+      position: absolute;
+      width: 30px;
+      height: 40px;
+      right: -5px;
+      bottom: 20px;
+    }
+    .music .volbar2 {
+      position: relative;
+
+      cursor: pointer;
+      height: 40px;
+      width: 5px;
+      background-color: white;
+      margin-left: 20px;
+    }
+    .musicbox .vol-now2 {
+      background-color: rgb(27, 98,131);
+      height: 0;
+      width: 5px;
+    }
     .musicbox .progress {
       width: 300px;
     }
@@ -209,12 +209,13 @@
           <div class="title">my song</div>
           <div class="author">li ang</div>
         </div>
-        <!--<div class="volume2">-->
-          <!--<div class="volbar2">-->
-            <!--<div class="vol-now2"></div>-->
+        <div class="volume2">
+          <div class="volbar2">
+            <div class="vol-now2"></div>
             <!--<div class="vol2">vol:100</div>-->
-          <!--</div>-->
-        <!--</div>-->
+          </div>
+          <div class="vol2">vol:100</div>
+        </div>
       </div>
       <div class="progress">
         <div class="bar">
@@ -224,14 +225,14 @@
         </div>
         <div class="time">0:00</div>
       </div>
-      <div class="volume">
+      <!--<div class="volume">-->
 
-          <div class="volbar">
-              <div class="vol-now"></div>
-              <div class="vol">vol:100</div>
-          </div>
+          <!--<div class="volbar">-->
+              <!--<div class="vol-now"></div>-->
+              <!--<div class="vol">vol:100</div>-->
+          <!--</div>-->
 
-      </div>
+      <!--</div>-->
 
     </div>
     <ul class="list">
@@ -297,23 +298,23 @@
       loadMusic(musiclist[currentIndex])
 
     }
-    $('.musicbox .volume').onclick = function(e){
-      console.log(e.offsetX)
-      var percent = e.offsetX / parseInt(getComputedStyle(this).width)
-      audio.volume = percent
-      $('.musicbox .vol-now').style.width = percent*100 + '%'
-      $('.musicbox .vol').innerText = 'vol:' + Math.floor(percent*100)
-      //console.log($('.musicbox .vol-now').style.width)
-    }
-    // $('.musicbox .volbar2').onclick = function(e){
-    //   console.log(e.offsetY)
-    //   //console.log($('.musicbox .vol-now2').style.height)
-    //   var percent = 1 - e.offsetY / parseInt(getComputedStyle(this).height)
+    // $('.musicbox .volume').onclick = function(e){
+    //   console.log(e.offsetX)
+    //   var percent = e.offsetX / parseInt(getComputedStyle(this).width)
     //   audio.volume = percent
-    //   $('.musicbox .vol-now2').style.height = ((1-percent)*100 + '%')
-    //   //$('.musicbox .vol2').innerText = 'vol:' + Math.floor(percent*100)
-    //   //console.log($('.musicbox .vol-now2').style.height)
+    //   $('.musicbox .vol-now').style.width = percent*100 + '%'
+    //   $('.musicbox .vol').innerText = 'vol:' + Math.floor(percent*100)
+    //   //console.log($('.musicbox .vol-now').style.width)
     // }
+    $('.musicbox .volbar2').onclick = function(e){
+      console.log(e.offsetY)
+      //console.log($('.musicbox .vol-now2').style.height)
+      var percent = 1 - e.offsetY / parseInt(getComputedStyle(this).height)
+      audio.volume = percent
+      $('.musicbox .vol-now2').style.height = ((1-percent)*100 + '%')
+      $('.musicbox .vol2').innerText = 'vol:' + Math.floor(percent*100)
+      //console.log($('.musicbox .vol-now2').style.height)
+    }
     $('.musicbox .play').onclick = function(){
       if(audio.paused){
         audio.play()
