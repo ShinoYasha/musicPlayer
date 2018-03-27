@@ -305,15 +305,15 @@
       $('.musicbox .vol').innerText = 'vol:' + Math.floor(percent*100)
       //console.log($('.musicbox .vol-now').style.width)
     }
-    $('.musicbox .volbar2').onclick = function(e){
-      console.log(e.offsetY)
-      //console.log($('.musicbox .vol-now2').style.height)
-      var percent = 1 - e.offsetY / parseInt(getComputedStyle(this).height)
-      audio.volume = percent
-      $('.musicbox .vol-now2').style.height = ((1-percent)*100 + '%')
-      //$('.musicbox .vol2').innerText = 'vol:' + Math.floor(percent*100)
-      //console.log($('.musicbox .vol-now2').style.height)
-    }
+    // $('.musicbox .volbar2').onclick = function(e){
+    //   console.log(e.offsetY)
+    //   //console.log($('.musicbox .vol-now2').style.height)
+    //   var percent = 1 - e.offsetY / parseInt(getComputedStyle(this).height)
+    //   audio.volume = percent
+    //   $('.musicbox .vol-now2').style.height = ((1-percent)*100 + '%')
+    //   //$('.musicbox .vol2').innerText = 'vol:' + Math.floor(percent*100)
+    //   //console.log($('.musicbox .vol-now2').style.height)
+    // }
     $('.musicbox .play').onclick = function(){
       if(audio.paused){
         audio.play()
