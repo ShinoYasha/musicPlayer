@@ -7,6 +7,7 @@
   <title>music</title>
   <link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_610922_3lo82a36ovnasjor.css">
   <link href="https://fonts.googleapis.com/css?family=Nanum+Brush+Script" rel="stylesheet"> 
   <style>
     @font-face {
@@ -207,6 +208,18 @@
       height: 38px;
       background: rgba(7, 255, 255, 0.8);
     }
+    .list span {
+      display: none;
+    }
+    .playing span {
+      float: right;
+      display: inline-block;
+      animation: 2s rotate linear infinite;
+    }
+    @keyframes rotate {
+      0% {transform: rotate(0deg); }
+      100% {transform: rotate(360deg);}
+    }
   </style>
 </head>
 <body>
@@ -380,7 +393,11 @@
       for(var i = 0;i<linum;i++){
         var li = document.createElement('li')
         li.classList.add(i)
+        var span = document.createElement('span')
+        span.classList.add('iconfont')
+        span.classList.add('icon-music')
         li.innerText = list[i].author + ' - ' + list[i].title
+        li.appendChild(span)
         ul.append(li)
       }
     }
