@@ -314,6 +314,7 @@
       ullist[currentIndex].classList.add('playing')
       $('.play .fa').classList.remove('fa-play')
       $('.play .fa').classList.add('fa-pause')
+      $('.playing span').style.animationPlayState = 'running'
     }
     audio.onpause = function() {
       console.log('pause')
@@ -346,10 +347,12 @@
     $('.musicbox .play').onclick = function(){
       if(audio.paused){
         audio.play()
+        $('.playing span').style.animationPlayState='running'
         this.querySelector('.fa').classList.remove('fa-play')
         this.querySelector('.fa').classList.add('fa-pause')
       }else{
         audio.pause()
+        $('.playing span').style.animationPlayState='paused'
         this.querySelector('.fa').classList.remove('fa-pause')
         this.querySelector('.fa').classList.add('fa-play')
       }
